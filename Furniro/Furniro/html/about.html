@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới Thiệu - Furniro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#B88E2F',
+                        secondary: '#F9F1E7',
+                        dark: '#333333',
+                        light: '#F9F1E7'
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-in-out',
+                        'slide-down': 'slideDown 0.8s ease-in-out',
+                        'slide-left': 'slideLeft 0.8s ease-in-out',
+                        'slide-right': 'slideRight 0.8s ease-in-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideLeft: {
+                            '0%': { transform: 'translateX(50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Animate on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Button hover effects */
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-hover:after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: width 0.3s ease;
+        }
+        .btn-hover:hover:after {
+            width: 120%;
+        }
+        
+        /* Team member card hover effect */
+        .team-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Team member image hover effect */
+        .team-image {
+            overflow: hidden;
+            position: relative;
+        }
+        .team-image img {
+            transition: transform 0.5s ease;
+        }
+        .team-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Team member social links */
+        .team-social {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .team-image:hover .team-social {
+            transform: translateY(0);
+        }
+        
+        /* Value card hover effect */
+        .value-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Feature card hover effect */
+        .feature-card {
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #B88E2F;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 10px 40px;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid #B88E2F;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        .timeline-left {
+            left: 0;
+        }
+        .timeline-right {
+            left: 50%;
+        }
+        .timeline-left::after {
+            right: -10px;
+        }
+        .timeline-right::after {
+            left: -10px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline-container::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::after {
+                left: 21px;
+            }
+            .timeline-left, .timeline-right {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white z-50 mobile-menu p-6 shadow-xl overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+                <span class="ml-2 text-xl font-semibold">Furniro</span>
+            </div>
+            <button id="closeMenu" class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-4">
+            <a href="index.html" class="font-medium py-2 border-b border-gray-100">Trang chủ</a>
+            <a href="shop.html" class="font-medium py-2 border-b border-gray-100">Cửa hàng</a>
+            <a href="about.html" class="font-medium py-2 border-b border-gray-100 text-primary">Giới thiệu</a>
+            <a href="contact.html" class="font-medium py-2 border-b border-gray-100">Liên hệ</a>
+        </nav>
+        
+        <div class="mt-8">
+            <h4 class="text-gray-500 mb-4">Trợ giúp</h4>
+            <ul class="space-y-2">
+                <li><a href="#" class="text-sm hover:text-primary">Phương thức thanh toán</a></li>
+                <li><a href="#" class="text-sm hover:text-primary">Chính sách đổi trả</a></li>
+                <li><a href="#" class="text-sm hover:text-primary">Chính sách bảo mật</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 px-4 md:px-12 lg:px-20 flex items-center justify-between border-b sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="menuToggle" class="p-2 mr-2 md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <a href="index.html" class="flex items-center">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+                <span class="ml-2 text-xl font-semibold">Furniro</span>
+            </a>
+        </div>
+        
+        <nav class="hidden md:flex space-x-8">
+            <a href="index.html" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Trang chủ</a>
+            <a href="shop.html" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Cửa hàng</a>
+            <a href="about.html" class="font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 text-primary">Giới thiệu</a>
+            <a href="contact.html" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Liên hệ</a>
+        </nav>
+        
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </a>
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </a>
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </a>
+            <a href="cart.html" class="p-2 hover:text-primary transition-colors relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">1</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- About Header -->
+    <section class="relative bg-secondary py-12 md:py-16 animate-fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center mb-4">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+            </div>
+            <h1 class="text-4xl font-bold mb-4 animate-slide-down">Giới Thiệu</h1>
+            <div class="flex justify-center items-center space-x-2 animate-slide-up">
+                <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Trang chủ</a>
+                <span class="text-gray-400">></span>
+                <span class="text-gray-600">Giới thiệu</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="py-16 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <img src="/placeholder.svg?height=600&width=600" alt="Câu chuyện của chúng tôi" class="w-full rounded-lg shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold mb-6">Câu chuyện của chúng tôi</h2>
+                    <p class="text-gray-600 mb-6">
+                        Furniro được thành lập vào năm 2010 bởi một nhóm các nhà thiết kế và thợ thủ công đam mê với mong muốn mang đến những sản phẩm nội thất chất lượng cao, thiết kế đẹp mắt và bền vững cho mọi gia đình Việt Nam.
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        Từ một cửa hàng nhỏ tại Hà Nội, chúng tôi đã phát triển thành một trong những thương hiệu nội thất hàng đầu Việt Nam với hơn 20 showroom trên toàn quốc và xuất khẩu sản phẩm đến nhiều quốc gia trong khu vực Đông Nam Á.
+                    </p>
+                    <p class="text-gray-600">
+                        Tại Furniro, chúng tôi tin rằng mỗi món đồ nội thất không chỉ là một sản phẩm mà còn là một tác phẩm nghệ thuật, một phần không thể thiếu trong không gian sống của bạn. Chúng tôi cam kết mang đến những sản phẩm chất lượng cao nhất với giá cả hợp lý, đáp ứng mọi nhu cầu và phong cách sống của khách hàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="py-16 bg-secondary animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Sứ mệnh & Tầm nhìn</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Chúng tôi cam kết mang đến những sản phẩm nội thất chất lượng cao, thiết kế đẹp mắt và bền vững cho mọi gia đình</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-center">Sứ mệnh</h3>
+                    <p class="text-gray-600 text-center">
+                        Sứ mệnh của Furniro là tạo ra những không gian sống đẹp, tiện nghi và bền vững thông qua các sản phẩm nội thất chất lượng cao, thiết kế sáng tạo và dịch vụ khách hàng xuất sắc. Chúng tôi cam kết sử dụng nguyên liệu bền vững, quy trình sản xuất thân thiện với môi trường và hỗ trợ các cộng đồng địa phương.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-center">Tầm nhìn</h3>
+                    <p class="text-gray-600 text-center">
+                        Tầm nhìn của chúng tôi là trở thành thương hiệu nội thất hàng đầu Đông Nam Á, được công nhận về chất lượng, thiết kế và sự bền vững. Chúng tôi hướng tới việc mở rộng thị trường quốc tế, đồng thời duy trì cam kết về chất lượng, sự sáng tạo và trách nhiệm xã hội. Furniro mong muốn truyền cảm hứng cho mọi người tạo ra không gian sống đẹp và bền vững.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="py-16 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Giá trị cốt lõi</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Những giá trị định hướng mọi hoạt động của chúng tôi</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="value-card bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Chất lượng</h3>
+                    <p class="text-gray-600 text-center">
+                        Chúng tôi cam kết sử dụng nguyên liệu tốt nhất và quy trình sản xuất nghiêm ngặt để đảm bảo mỗi sản phẩm đều đạt tiêu chuẩn chất lượng cao nhất.
+                    </p>
+                </div>
+                
+                <div class="value-card bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Sáng tạo</h3>
+                    <p class="text-gray-600 text-center">
+                        Chúng tôi không ngừng đổi mới và sáng tạo trong thiết kế, kết hợp giữa xu hướng hiện đại và giá trị truyền thống để tạo ra những sản phẩm độc đáo.
+                    </p>
+                </div>
+                
+                <div class="value-card bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Bền vững</h3>
+                    <p class="text-gray-600 text-center">
+                        Chúng tôi cam kết sử dụng nguyên liệu bền vững, quy trình sản xuất thân thiện với môi trường và hỗ trợ các cộng đồng địa phương.
+                    </p>
+                </div>
+                
+                <div class="value-card bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-secondary rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Khách hàng</h3>
+                    <p class="text-gray-600 text-center">
+                        Chúng tôi đặt khách hàng vào trung tâm của mọi quyết định, luôn lắng nghe và đáp ứng nhu cầu của khách hàng với dịch vụ tận tâm nhất.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Team -->
+    <section class="py-16 bg-secondary animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Đội ngũ của chúng tôi</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Những con người tài năng và đam mê đằng sau thương hiệu Furniro</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Team Member 1 -->
+                <div class="team-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="team-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Nguyễn Văn A" class="w-full h-64 object-cover">
+                        <div class="team-social">
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-1">Nguyễn Văn A</h3>
+                        <p class="text-gray-600 mb-2">Giám đốc điều hành</p>
+                        <p class="text-gray-500 text-sm">Với hơn 15 năm kinh nghiệm trong ngành nội thất, ông A đã dẫn dắt Furniro trở thành một trong những thương hiệu nội thất hàng đầu Việt Nam.</p>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="team-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Trần Thị B" class="w-full h-64 object-cover">
+                        <div class="team-social">
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-1">Trần Thị B</h3>
+                        <p class="text-gray-600 mb-2">Giám đốc thiết kế</p>
+                        <p class="text-gray-500 text-sm">Với nền tảng về thiết kế nội thất từ Ý, bà B mang đến những thiết kế độc đáo, kết hợp giữa phong cách hiện đại và truyền thống.</p>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="team-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Lê Văn C" class="w-full h-64 object-cover">
+                        <div class="team-social">
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-1">Lê Văn C</h3>
+                        <p class="text-gray-600 mb-2">Giám đốc sản xuất</p>
+                        <p class="text-gray-500 text-sm">Với hơn 20 năm kinh nghiệm trong sản xuất nội thất, ông C đảm bảo mọi sản phẩm của Furniro đều đạt tiêu chuẩn chất lượng cao nhất.</p>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="team-card bg-white rounded-lg overflow-hidden shadow-md">
+                    <div class="team-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Phạm Thị D" class="w-full h-64 object-cover">
+                        <div class="team-social">
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="p-2 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold mb-1">Phạm Thị D</h3>
+                        <p class="text-gray-600 mb-2">Giám đốc marketing</p>
+                        <p class="text-gray-500 text-sm">Với kinh nghiệm trong lĩnh vực marketing và truyền thông, bà D đã giúp xây dựng thương hiệu Furniro trở nên nổi bật trên thị trường.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Milestones -->
+    <section class="py-16 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Hành trình phát triển</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Những cột mốc quan trọng trong quá trình phát triển của Furniro</p>
+            </div>
+            
+            <div class="timeline-container">
+                <div class="timeline-item timeline-left animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2010</h3>
+                        <p class="text-gray-600">Furniro được thành lập với cửa hàng đầu tiên tại Hà Nội, chuyên cung cấp các sản phẩm nội thất cao cấp.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-right animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2013</h3>
+                        <p class="text-gray-600">Mở rộng với 5 cửa hàng tại các thành phố lớn và xây dựng nhà máy sản xuất đầu tiên tại Bắc Ninh.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-left animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2015</h3>
+                        <p class="text-gray-600">Nhận giải thưởng "Thương hiệu nội thất xuất sắc" và bắt đầu xuất khẩu sản phẩm sang các nước trong khu vực.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-right animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2018</h3>
+                        <p class="text-gray-600">Mở rộng thêm 10 showroom trên toàn quốc và ra mắt dòng sản phẩm eco-friendly sử dụng nguyên liệu tái chế.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-left animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2020</h3>
+                        <p class="text-gray-600">Kỷ niệm 10 năm thành lập với 20 showroom trên toàn quốc và ra mắt nền tảng mua sắm trực tuyến.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-right animate-on-scroll">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-semibold mb-2">2023</h3>
+                        <p class="text-gray-600">Mở rộng thị trường quốc tế với các showroom tại Singapore, Malaysia và Thái Lan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manufacturing Process -->
+    <section class="py-16 bg-secondary animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Quy trình sản xuất</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Từ ý tưởng đến sản phẩm hoàn thiện</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Thiết kế</h3>
+                    <p class="text-gray-600 text-center">
+                        Đội ngũ thiết kế của chúng tôi nghiên cứu xu hướng và phát triển ý tưởng sản phẩm mới, kết hợp giữa thẩm mỹ và công năng.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl">2</div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Lựa chọn nguyên liệu</h3>
+                    <p class="text-gray-600 text-center">
+                        Chúng tôi chỉ sử dụng những nguyên liệu chất lượng cao nhất, được lựa chọn kỹ lưỡng từ các nhà cung cấp uy tín.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl">3</div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Sản xuất</h3>
+                    <p class="text-gray-600 text-center">
+                        Quy trình sản xuất được thực hiện bởi những thợ thủ công lành nghề kết hợp với công nghệ hiện đại để tạo ra sản phẩm hoàn hảo.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl">4</div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Kiểm tra chất lượng</h3>
+                    <p class="text-gray-600 text-center">
+                        Mỗi sản phẩm đều trải qua quy trình kiểm tra chất lượng nghiêm ngặt để đảm bảo đáp ứng các tiêu chuẩn cao nhất trước khi đến tay khách hàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Khách hàng nói gì về chúng tôi</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Những đánh giá từ khách hàng đã trải nghiệm sản phẩm của Furniro</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "Tôi rất hài lòng với chất lượng sản phẩm của Furniro. Sofa Asgaard mà tôi mua không chỉ đẹp mà còn rất bền và thoải mái. Dịch vụ giao hàng và lắp đặt cũng rất chuyên nghiệp."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="/placeholder.svg?height=50&width=50" alt="Nguyễn Văn A" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Nguyễn Văn A</h4>
+                            <p class="text-gray-500 text-sm">Hà Nội</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "Đồ nội thất của Furniro thực sự đẳng cấp và sang trọng. Tôi đã mua toàn bộ bộ nội thất phòng khách và rất hài lòng với chất lượng và thiết kế. Sẽ tiếp tục ủng hộ Furniro trong tương lai."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="/placeholder.svg?height=50&width=50" alt="Trần Thị B" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Trần Thị B</h4>
+                            <p class="text-gray-500 text-sm">TP. Hồ Chí Minh</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "Tôi đã tìm kiếm một bộ bàn ăn phù hợp với không gian nhà mình trong thời gian dài và cuối cùng đã tìm thấy tại Furniro. Chất lượng sản phẩm vượt xa mong đợi của tôi."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="/placeholder.svg?height=50&width=50" alt="Lê Văn C" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Lê Văn C</h4>
+                            <p class="text-gray-500 text-sm">Đà Nẵng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-12 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Chất lượng cao</h3>
+                    <p class="text-gray-600 text-sm">Làm từ vật liệu hàng đầu</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Bảo hành</h3>
+                    <p class="text-gray-600 text-sm">Hơn 2 năm</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Miễn phí vận chuyển</h3>
+                    <p class="text-gray-600 text-sm">Đơn hàng trên 3.500.000 đ</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Hỗ trợ 24/7</h3>
+                    <p class="text-gray-600 text-sm">Đội ngũ hỗ trợ tận tâm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-12 md:pt-16 pb-8 border-t animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Furniro.</h3>
+                    <p class="text-gray-600 mb-4">400 University Drive Suite 200<br>Coral Gables,<br>FL 33134 USA</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Liên kết</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a></li>
+                        <li><a href="shop.html" class="hover:text-primary transition-colors">Cửa hàng</a></li>
+                        <li><a href="about.html" class="hover:text-primary transition-colors">Giới thiệu</a></li>
+                        <li><a href="contact.html" class="hover:text-primary transition-colors">Liên hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Trợ giúp</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition-colors">Phương thức thanh toán</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Chính sách đổi trả</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Đăng ký nhận tin</h4>
+                    <div class="flex">
+                        <input type="email" placeholder="Nhập địa chỉ email của bạn" class="border-b border-gray-300 py-2 px-2 focus:outline-none focus:border-primary transition-colors flex-grow">
+                        <button class="border-b border-gray-900 py-2 px-4 font-medium hover:text-primary hover:border-primary transition-colors">ĐĂNG KÝ</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t pt-8">
+                <p class="text-gray-500 text-center">2023 Furniro. Tất cả các quyền được bảo lưu</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for animations and mobile menu -->
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        function closeMenuFunction() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        closeMenu.addEventListener('click', closeMenuFunction);
+        mobileMenuOverlay.addEventListener('click', closeMenuFunction);
+        
+        // Scroll animations
+        const animateOnScroll = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateOnScroll.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>

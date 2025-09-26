@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng - Furniro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#B88E2F',
+                        secondary: '#F9F1E7',
+                        dark: '#333333',
+                        light: '#F9F1E7'
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-in-out',
+                        'slide-down': 'slideDown 0.8s ease-in-out',
+                        'slide-left': 'slideLeft 0.8s ease-in-out',
+                        'slide-right': 'slideRight 0.8s ease-in-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideLeft: {
+                            '0%': { transform: 'translateX(50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Animate on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Button hover effects */
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-hover:after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: width 0.3s ease;
+        }
+        .btn-hover:hover:after {
+            width: 120%;
+        }
+        
+        /* Product card hover effect */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Product image hover effect */
+        .product-image {
+            overflow: hidden;
+            position: relative;
+        }
+        .product-image img {
+            transition: transform 0.5s ease;
+        }
+        .product-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Product actions */
+        .product-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .product-image:hover .product-actions {
+            transform: translateY(0);
+        }
+        
+        /* Filter dropdown */
+        .filter-dropdown {
+            position: relative;
+        }
+        .filter-dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            border-radius: 4px;
+            padding: 8px 0;
+        }
+        .filter-dropdown:hover .filter-dropdown-content {
+            display: block;
+        }
+        
+        /* Feature card hover effect */
+        .feature-card {
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B88E2F;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9e7a29;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white z-50 mobile-menu p-6 shadow-xl overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+                <span class="ml-2 text-xl font-semibold">Furniro</span>
+            </div>
+            <button id="closeMenu" class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-4">
+            <a href="index.html" class="font-medium py-2 border-b border-gray-100">Trang chủ</a>
+            <a href="shop.html" class="font-medium py-2 border-b border-gray-100 text-primary">Cửa hàng</a>
+            <a href="#" class="font-medium py-2 border-b border-gray-100">Giới thiệu</a>
+            <a href="contact.html" class="font-medium py-2 border-b border-gray-100">Liên hệ</a>
+        </nav>
+        
+        <div class="mt-8">
+            <h4 class="text-gray-500 mb-4">Trợ giúp</h4>
+            <ul class="space-y-2">
+                <li><a href="#" class="text-sm hover:text-primary">Phương thức thanh toán</a></li>
+                <li><a href="#" class="text-sm hover:text-primary">Chính sách đổi trả</a></li>
+                <li><a href="#" class="text-sm hover:text-primary">Chính sách bảo mật</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 px-4 md:px-12 lg:px-20 flex items-center justify-between border-b sticky top-0 z-30">
+        <div class="flex items-center">
+            <button id="menuToggle" class="p-2 mr-2 md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <a href="index.html" class="flex items-center">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+                <span class="ml-2 text-xl font-semibold">Furniro</span>
+            </a>
+        </div>
+        
+        <nav class="hidden md:flex space-x-8">
+            <a href="index.html" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Trang chủ</a>
+            <a href="shop.html" class="font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-primary after:left-0 after:bottom-0 text-primary">Cửa hàng</a>
+            <a href="#" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Giới thiệu</a>
+            <a href="contact.html" class="font-medium relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-primary after:left-0 after:bottom-0 after:transition-all hover:after:w-full">Liên hệ</a>
+        </nav>
+        
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </a>
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </a>
+            <a href="#" class="p-2 hover:text-primary transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </a>
+            <a href="cart.html" class="p-2 hover:text-primary transition-colors relative">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">1</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Shop Header -->
+    <section class="relative bg-secondary py-12 md:py-16 animate-fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center mb-4">
+                <img src="/placeholder.svg?height=40&width=40" alt="Furniro Logo" class="h-10">
+            </div>
+            <h1 class="text-4xl font-bold mb-4 animate-slide-down">Cửa Hàng</h1>
+            <div class="flex justify-center items-center space-x-2 animate-slide-up">
+                <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Trang chủ</a>
+                <span class="text-gray-400">></span>
+                <span class="text-gray-600">Cửa hàng</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Filters -->
+    <section class="py-8 border-b animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="flex items-center mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                        </svg>
+                        <span>Hiển thị 1-16 của 32 kết quả</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-4">
+                    <div class="filter-dropdown">
+                        <button class="flex items-center border border-gray-300 rounded-md px-4 py-2 hover:border-primary transition-colors">
+                            <span>Sắp xếp theo</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="filter-dropdown-content">
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Mặc định</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Giá: Thấp đến cao</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Giá: Cao đến thấp</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Mới nhất</a>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-dropdown">
+                        <button class="flex items-center border border-gray-300 rounded-md px-4 py-2 hover:border-primary transition-colors">
+                            <span>Danh mục</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="filter-dropdown-content">
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Tất cả</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Phòng khách</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Phòng ngủ</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Phòng ăn</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Văn phòng</a>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-dropdown">
+                        <button class="flex items-center border border-gray-300 rounded-md px-4 py-2 hover:border-primary transition-colors">
+                            <span>Giá</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="filter-dropdown-content">
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Tất cả</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Dưới 5.000.000 đ</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">5.000.000 đ - 15.000.000 đ</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">15.000.000 đ - 30.000.000 đ</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Trên 30.000.000 đ</a>
+                        </div>
+                    </div>
+                    
+                    <button class="flex items-center border border-gray-300 rounded-md px-4 py-2 hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        </svg>
+                    </button>
+                    
+                    <button class="flex items-center border border-gray-300 rounded-md px-4 py-2 hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-12 animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Sofa Asgaard" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-primary text-white text-xs px-2 py-1 rounded">-30%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Sofa Asgaard</h3>
+                        <p class="text-gray-600 mb-2">Phòng khách</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">250.000.000 đ</span>
+                                <span class="text-gray-400 line-through ml-2 text-sm">350.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Ghế Leviosa" class="w-full h-64 object-cover">
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Ghế Leviosa</h3>
+                        <p class="text-gray-600 mb-2">Phòng khách</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">12.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Bàn Lolito" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-primary text-white text-xs px-2 py-1 rounded">Mới</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Bàn Lolito</h3>
+                        <p class="text-gray-600 mb-2">Phòng ăn</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">18.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Đèn Respira" class="w-full h-64 object-cover">
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Đèn Respira</h3>
+                        <p class="text-gray-600 mb-2">Phòng ngủ</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">5.000.000 đ</span>
+                                <span class="text-gray-400 line-through ml-2 text-sm">7.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Ghế Syltherine" class="w-full h-64 object-cover">
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Ghế Syltherine</h3>
+                        <p class="text-gray-600 mb-2">Phòng khách</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">8.500.000 đ</span>
+                                <span class="text-gray-400 line-through ml-2 text-sm">10.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Tủ Grifo" class="w-full h-64 object-cover">
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Tủ Grifo</h3>
+                        <p class="text-gray-600 mb-2">Phòng ngủ</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">15.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 7 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Kệ sách Muggo" class="w-full h-64 object-cover">
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Kệ sách Muggo</h3>
+                        <p class="text-gray-600 mb-2">Văn phòng</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">7.200.000 đ</span>
+                                <span class="text-gray-400 line-through ml-2 text-sm">9.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 8 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden">
+                    <div class="product-image">
+                        <img src="/placeholder.svg?height=300&width=300" alt="Bàn Pingky" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-primary text-white text-xs px-2 py-1 rounded">-50%</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </button>
+                            <button class="p-2 bg-white rounded-full hover:bg-primary hover:text-white transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Bàn Pingky</h3>
+                        <p class="text-gray-600 mb-2">Phòng ăn</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-primary font-bold">7.500.000 đ</span>
+                                <span class="text-gray-400 line-through ml-2 text-sm">15.000.000 đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12">
+                <nav class="flex space-x-2">
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-md bg-primary text-white">1</a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:border-primary hover:text-primary transition-colors">2</a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:border-primary hover:text-primary transition-colors">3</a>
+                    <a href="#" class="px-4 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:border-primary hover:text-primary transition-colors">Tiếp</a>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-12 bg-secondary animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Chất lượng cao</h3>
+                    <p class="text-gray-600 text-sm">Làm từ vật liệu hàng đầu</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Bảo hành</h3>
+                    <p class="text-gray-600 text-sm">Hơn 2 năm</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Miễn phí vận chuyển</h3>
+                    <p class="text-gray-600 text-sm">Đơn hàng trên 3.500.000 đ</p>
+                </div>
+                
+                <div class="flex flex-col items-center text-center feature-card">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Hỗ trợ 24/7</h3>
+                    <p class="text-gray-600 text-sm">Đội ngũ hỗ trợ tận tâm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white pt-12 md:pt-16 pb-8 border-t animate-on-scroll">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Furniro.</h3>
+                    <p class="text-gray-600 mb-4">400 University Drive Suite 200<br>Coral Gables,<br>FL 33134 USA</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Liên kết</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a></li>
+                        <li><a href="shop.html" class="hover:text-primary transition-colors">Cửa hàng</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Giới thiệu</a></li>
+                        <li><a href="contact.html" class="hover:text-primary transition-colors">Liên hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Trợ giúp</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-primary transition-colors">Phương thức thanh toán</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Chính sách đổi trả</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-500 mb-4">Đăng ký nhận tin</h4>
+                    <div class="flex">
+                        <input type="email" placeholder="Nhập địa chỉ email của bạn" class="border-b border-gray-300 py-2 px-2 focus:outline-none focus:border-primary transition-colors flex-grow">
+                        <button class="border-b border-gray-900 py-2 px-4 font-medium hover:text-primary hover:border-primary transition-colors">ĐĂNG KÝ</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t pt-8">
+                <p class="text-gray-500 text-center">2023 Furniro. Tất cả các quyền được bảo lưu</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for animations and mobile menu -->
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        function closeMenuFunction() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        
+        closeMenu.addEventListener('click', closeMenuFunction);
+        mobileMenuOverlay.addEventListener('click', closeMenuFunction);
+        
+        // Scroll animations
+        const animateOnScroll = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        animateOnScroll.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
