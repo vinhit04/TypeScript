@@ -1,10 +1,8 @@
-import { DatePicker } from "antd";
 import ProductList from "./components/ProductList";
-import RefAutoComplete from "antd/es/auto-complete/AutoComplete";
+
 function App() {
     return (
         <>
-            <DatePicker />
             <ProductList />
         </>
     );
@@ -12,3 +10,9 @@ function App() {
 
 export default App;
 
+/**
+ * - Sử dụng Axios
+ * - Tách services
+ * - Sử form trong antd
+
+ */
